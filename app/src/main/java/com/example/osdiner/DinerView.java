@@ -139,6 +139,8 @@ public class DinerView extends SurfaceView implements SurfaceHolder.Callback {
     private boolean gameOverDialogShown = false;
     // <<< END MENU BUTTON FIELDS >>>
 
+    private static final float FOOD_PLATE_DIAMETER = 60f;
+
     // Constructor needed for inflating from XML
     public DinerView(Context context, @Nullable  AttributeSet attrs) {
         super(context, attrs);
@@ -322,12 +324,12 @@ public class DinerView extends SurfaceView implements SurfaceHolder.Callback {
         waitingAreaRect = new RectF(margin, margin, margin + waitingAreaWidth, height - margin);
 
         // --- Counter ---
-        // Example: Bottom edge, from end of waiting area to near the right edge
-        float counterHeight = height / 8.0f;
-        float counterTop = height - margin - counterHeight;
+        float newCounterTop = height * 0.70f;     // Start counter 70% down the screen
+        float newCounterBottom = height * 0.95f; // End counter 85% down the screen
+        // float counterHeight = newCounterBottom - newCounterTop; // Calculated height if needed
         float counterLeft = waitingAreaRect.right + margin; // Start after waiting area
         float counterRight = width - margin; // Go to right margin
-        counterRect = new RectF(counterLeft, counterTop, counterRight, height - margin);
+        counterRect = new RectF(counterLeft, newCounterTop, counterRight, newCounterBottom);
 
         // --- Tables ---
         // Example: 3 Tables in the remaining space
@@ -336,12 +338,12 @@ public class DinerView extends SurfaceView implements SurfaceHolder.Callback {
         float tableAreaLeft = waitingAreaRect.right + margin;
         float tableAreaRight = width - margin;
         float tableAreaTop = margin;
-        // Leave space above counter
-        float tableAreaBottom = counterTop - margin;
+
+        float tableAreaBottom = newCounterTop - margin; // Use the calculated newCounterTop
         float tableAreaWidth = tableAreaRight - tableAreaLeft;
         float tableAreaHeight = tableAreaBottom - tableAreaTop;
 
-        float tableSize = Math.min(tableAreaWidth / (numTables + 1), tableAreaHeight / 3.0f); // Size based on available space
+        float tableSize = Math.min(tableAreaWidth / (numTables + 1), tableAreaHeight / 2.5f); // Size based on available space
         // Adjust spacing if needed
         float tableSpacingX = (tableAreaWidth - (numTables * tableSize)) / (numTables + 1);
 
@@ -799,8 +801,8 @@ public class DinerView extends SurfaceView implements SurfaceHolder.Callback {
 
                 if (seatedCustomer.getState() == Customer.CustomerState.WAITING_ORDER_CONFIRM) {
                     // Draw 'ORDER' indicator (Above Table)
-                    float indicatorWidth = 160f;
-                    float indicatorHeight = 30f;
+                    float indicatorWidth = 200f;
+                    float indicatorHeight = 50f;
                     float indicatorX = tableCenterX - indicatorWidth / 2.0f;
                     float indicatorY = tableRect.top - indicatorPadding - indicatorHeight;
                     // ****************************
@@ -818,17 +820,16 @@ public class DinerView extends SurfaceView implements SurfaceHolder.Callback {
                     customersWithFoodReady.add(seatedCustomer);
 
                 } else if (seatedCustomer.getState() == Customer.CustomerState.EATING) {
-                    float plateRadius = 70f / 2f;
-                    float foodIndicatorSize = plateRadius * 2f;
+                    float plateRadius = FOOD_PLATE_DIAMETER / 2f;
                     float foodRadius = plateRadius * 0.65f;
-                    float plateX = iconDestRect.right + plateRadius + 5f; // To the right of customer icon
-                    float plateY = iconDestRect.centerY(); // Vertically aligned with icon center
+                    float plateX = iconDestRect.right + plateRadius + 5f;
+                    float plateY = iconDestRect.centerY();
                     canvas.drawCircle(plateX, plateY, plateRadius, foodReadyIndicatorPaint);
                     canvas.drawCircle(plateX, plateY, foodRadius, foodItemPaint);
                 } else if (seatedCustomer.getState() == Customer.CustomerState.READY_TO_LEAVE) {
                     // Draw "DONE" indicator
-                    float indicatorWidth = 70f;
-                    float indicatorHeight = 35f;
+                    float indicatorWidth = 200f;
+                    float indicatorHeight = 50f;
                     float indicatorX = tableCenterX - indicatorWidth / 2.0f;
                     float indicatorY = tableRect.top - indicatorPadding - indicatorHeight;
 
@@ -849,8 +850,8 @@ public class DinerView extends SurfaceView implements SurfaceHolder.Callback {
         // --- 6. Draw Food Ready Indicators ON THE COUNTER ---
         // ... (Existing loop for drawing food on counter - unchanged) ...
         if (!customersWithFoodReady.isEmpty()) {
-            float foodIndicatorSize = 40f;
-            float foodSpacing = 10f;
+            float foodIndicatorSize = FOOD_PLATE_DIAMETER;
+            float foodSpacing = 15f;
             float startX = counterRect.left + foodSpacing + foodIndicatorSize / 2f;
             float counterItemY = counterRect.centerY();
 
@@ -876,14 +877,14 @@ public class DinerView extends SurfaceView implements SurfaceHolder.Callback {
 
                 foodReadyTapAreas.add(new Pair<>(indicatorRect, customer));
 
-                float plateRadius_counter = foodIndicatorSize / 2f; // Use distinct name
+                float plateRadius_counter = foodIndicatorSize / 2f;
                 canvas.drawCircle(currentX, counterItemY, plateRadius_counter, foodReadyIndicatorPaint);
-                float foodRadius_counter = plateRadius_counter * 0.65f; // Use distinct name
+                float foodRadius_counter = plateRadius_counter * 0.65f;
                 canvas.drawCircle(currentX, counterItemY, foodRadius_counter, foodItemPaint);
 
-                textPaint.setTextSize(20f);
+                textPaint.setTextSize(35f);
                 textPaint.setTextAlign(Paint.Align.CENTER);
-                canvas.drawText(customer.getDisplayId(), currentX, counterItemY + foodIndicatorSize / 2f + 18f, textPaint);
+                canvas.drawText(customer.getDisplayId(), currentX, counterItemY + foodIndicatorSize / 2f + 20f, textPaint);
                 textPaint.setTextSize(35f);
                 textPaint.setTextAlign(Paint.Align.LEFT);
             }
@@ -913,7 +914,7 @@ public class DinerView extends SurfaceView implements SurfaceHolder.Callback {
                 }
             } else if (draggedFoodCustomer != null) {
                 // --- Draw Dragged Food --- (Existing code is likely fine)
-                float draggedFoodSize = 40f;
+                float draggedFoodSize = FOOD_PLATE_DIAMETER;
                 float plateRadius_drag = draggedFoodSize / 2f;
                 float foodRadius_drag = plateRadius_drag * 0.65f;
                 canvas.drawCircle(dragX, dragY, plateRadius_drag, foodReadyIndicatorPaint);

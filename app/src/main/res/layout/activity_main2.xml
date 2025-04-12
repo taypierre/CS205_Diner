@@ -2,38 +2,48 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"  android:layout_width="match_parent"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="16dp"
-    tools:context=".MainActivity"> <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="OS Diner" android:textSize="34sp"
-    android:layout_marginBottom="24dp"/>
+    android:padding="0dp"
+    tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/text_high_score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="High Score: 0"
-        android:textSize="20sp"
-        android:layout_marginBottom="32dp"/>
+        android:text="OS Diner"
+        android:textSize="34sp"
+        android:layout_marginBottom="16dp"/>
+    <TextView
+    android:id="@+id/text_high_score"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="High Score: 0"
+    android:textSize="20sp"
+    android:layout_marginBottom="6dp"/>
     <Button
-        android:id="@+id/button_start_game"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Start Game" android:layout_marginBottom="16dp"/>
-
+    android:id="@+id/button_start_game"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Start Game"
+    android:layout_marginBottom="2dp"/>
     <Button
-        android:id="@+id/button_credits"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Credits" android:layout_marginBottom="16dp"/>
-
+    android:id="@+id/buttonHowToPlay"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="How to Play"
+    android:layout_marginBottom="2dp"/>
     <Button
-        android:id="@+id/button_exit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Exit"/> </LinearLayout>
+    android:id="@+id/buttonCredits"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Credits"
+    android:layout_marginBottom="2dp"/>
+    <Button
+    android:id="@+id/button_exit"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Exit"/>
+</LinearLayout>

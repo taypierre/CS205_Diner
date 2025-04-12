@@ -41,7 +41,7 @@ public class Customer {
             this.patienceRateMultiplier = patienceRateMultiplier;
         }
 
-        // --- Getters (Needed for regular classes) --- // <<< ADDED GETTERS
+
         public CustomerType getType() {
             return type;
         }
@@ -58,7 +58,7 @@ public class Customer {
         public float getPatienceRateMultiplier() {
             return patienceRateMultiplier;
         }
-        // --- End Getters ---
+
     }
     // --- End CustomerConfig Class ---
 
@@ -68,19 +68,19 @@ public class Customer {
     static {
         CONFIGS = new EnumMap<>(CustomerType.class);
         CONFIGS.put(CustomerType.NORMAL, new CustomerConfig(
-                CustomerType.NORMAL, 200f, 100,
-                R.drawable.customer_normal, // <<< CHANGED: Use R.drawable ID
+                CustomerType.NORMAL, 250f, 100,
+                R.drawable.customer_normal,
                 1.0f
         ));
         CONFIGS.put(CustomerType.IMPATIENT, new CustomerConfig(
-                CustomerType.IMPATIENT, 180f, 120,
-                R.drawable.customer_impatient, // <<< CHANGED
+                CustomerType.IMPATIENT, 200f, 150,
+                R.drawable.customer_impatient,
                 1.5f
         ));
         CONFIGS.put(CustomerType.VIP, new CustomerConfig(
-                CustomerType.VIP, 200f, 250,
-                R.drawable.customer_vip, // <<< CHANGED
-                0.8f
+                CustomerType.VIP, 180f, 250,
+                R.drawable.customer_vip,
+                1.0f
         ));
     }
     // -----------------------------------

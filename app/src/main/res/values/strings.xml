@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">OS Diner</string>
+    <string name="credits_button_text">Credits</string>
+    <string name="credits_dialog_title">Credits</string>
+    <string name="credits_dialog_message">Team: G1T6\n\nMembers:\nMalcolm\nAdrian\nMarcus\nChampion\nAndre\nAaron</string>
+    <string name="dialog_ok_button">OK</string>
 </resources>

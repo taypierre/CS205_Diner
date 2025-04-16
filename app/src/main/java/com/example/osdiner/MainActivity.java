@@ -3,15 +3,13 @@ package com.example.osdiner;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context; // Import Context
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences; // Import SharedPreferences
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
-import android.widget.TextView; // Import TextView
-import android.widget.Toast;
+import android.widget.TextView;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,27 +44,20 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (exitButton != null) {
-            exitButton.setOnClickListener(v -> {
-                finishAffinity();
-            });
+            exitButton.setOnClickListener(v -> finishAffinity());
         }
 
 
         Button howToPlayButton = findViewById(R.id.buttonHowToPlay);
         if (howToPlayButton != null) {
-            howToPlayButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(MainActivity.this, HowToPlayActivity.class);
-                    startActivity(intent);
-                }
+            howToPlayButton.setOnClickListener(v -> {
+                Intent intent = new Intent(MainActivity.this, HowToPlayActivity.class);
+                startActivity(intent);
             });
         }
         Button creditsButton = findViewById(R.id.buttonCredits);
         if (creditsButton != null) {
-            creditsButton.setOnClickListener(v -> {
-                showCreditsDialog();
-            });
+            creditsButton.setOnClickListener(v -> showCreditsDialog());
         }
     }
 
@@ -82,20 +73,6 @@ public class MainActivity extends AppCompatActivity {
         if (highScoreTextView != null) {
             highScoreTextView.setText("High Score: " + highScore);
         }
-    }
-    private void showHowToPlayDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("How to Play")
-                .setMessage("Rule 1: Do this...\nRule 2: Do that...\nRule 3: Profit!")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss(); // Close the dialog when OK is clicked
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_info)
-                .setCancelable(true)
-                .show();
     }
 
     private void showCreditsDialog() {

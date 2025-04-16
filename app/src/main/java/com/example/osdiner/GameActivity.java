@@ -4,12 +4,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class GameActivity extends AppCompatActivity {
     private DinerView dinerView;
@@ -47,9 +43,7 @@ public class GameActivity extends AppCompatActivity {
                             dinerView.resumeGame();
                         }
                     })
-                    .setNegativeButton("Quit to Menu", (dialog, which) -> {
-                        stopGameAndFinish();
-                    })
+                    .setNegativeButton("Quit to Menu", (dialog, which) -> stopGameAndFinish())
                     .show();
             Log.d("GameActivity", "In-Game menu dialog shown.");
         });

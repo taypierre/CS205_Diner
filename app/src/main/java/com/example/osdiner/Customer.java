@@ -1,6 +1,5 @@
 package com.example.osdiner;
 
-import android.graphics.Color;
 import android.util.Log;
 
 import androidx.annotation.DrawableRes;
@@ -37,9 +36,6 @@ public class Customer {
         }
 
 
-        public CustomerType getType() {
-            return type;
-        }
         public float getInitialPatience() {
             return initialPatience;
         }
@@ -160,8 +156,6 @@ public class Customer {
     }
     public CustomerState getState() { return this.state; }
     public float getPatience() { return this.patience; }
-    public CustomerType getType() { return type; }
-    public int getScoreValue() { return scoreValue; }
     @DrawableRes public int getCustomerIconResId() { return customerIconResId; }
 
     // Calculate percentage based on initial patience for this customer
@@ -207,9 +201,6 @@ public class Customer {
         }
     }
     public float getTimeUntilReadyToOrder() { return this.timeUntilReadyToOrder; }
-    public boolean isReadyToOrder() {
-        return this.state == CustomerState.SEATED_IDLE && this.timeUntilReadyToOrder <= 0;
-    }
 
     public void startCookingTimer(float duration) { this.timeUntilFoodReady = duration; }
     public void decreaseCookingTimer(float deltaTime) {
@@ -217,13 +208,12 @@ public class Customer {
             this.timeUntilFoodReady -= deltaTime;
         }
     }
-    public float getTimeUntilFoodReady() { return this.timeUntilFoodReady; }
     public boolean isCookingFinished() {
         return this.state == CustomerState.WAITING_FOOD && this.timeUntilFoodReady <= 0;
     }
 
     public void startEatingTimer() {
-        this.timeUntilFinishedEating = UNIVERSAL_EATING_DURATION; // Uses the constant internally
+        this.timeUntilFinishedEating = UNIVERSAL_EATING_DURATION;
         Log.d(TAG, getDisplayId() + " started eating timer: " + UNIVERSAL_EATING_DURATION + "s");
     }
     public void decreaseEatingTimer(float deltaTime) {
@@ -237,6 +227,9 @@ public class Customer {
     public static void resetCustomerIdCounter() {
         nextId = 0;
     }
-    public float getTimeUntilFinishedEating() { return timeUntilFinishedEating; }
+
+    public int getScoreValue() {
+        return this.scoreValue;
+    }
 
 }

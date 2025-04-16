@@ -10,8 +10,6 @@ public class CustomerGeneratorThread extends Thread {
     private final BlockingQueue<Customer> customerQueue;
     private final Random random = new Random();
     private volatile boolean running = true;
-    // Average time between customer arrivals
-    private static final int AVG_ARRIVAL_DELAY_MS = 10000;
 
     private final DinerState dinerState;
 

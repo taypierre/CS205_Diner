@@ -25,8 +25,7 @@ public class GameThread extends Thread {
     private static final long TARGET_FPS = 60;
     private static final long OPTIMAL_TIME_NS = 1_000_000_000 / TARGET_FPS;
 
-    private volatile boolean paused = false; // <<< ADD Pause flag
-    private final Object pauseLock = new Object();
+    private volatile boolean paused = false;
 
     public GameThread(Context context, SurfaceHolder surfaceHolder, DinerView dinerView, DinerState dinerState) {
         super("GameThread");

@@ -74,9 +74,6 @@ public class DinerView extends SurfaceView implements SurfaceHolder.Callback {
     private Bitmap heartBitmap;
     private static final float HEART_SIZE = 50f;
     private static final float HEART_SPACING = 10f;
-    private static final float HEART_MARGIN_TOP = 50f;
-    private static final float HEART_MARGIN_LEFT = 30f;
-
     private static final float CUSTOMER_ICON_WIDTH = 80f;
     private static final float CUSTOMER_ICON_HEIGHT = 100f;
 
@@ -88,8 +85,6 @@ public class DinerView extends SurfaceView implements SurfaceHolder.Callback {
 
     private static final float PATIENCE_BAR_WIDTH = 60f;
     private static final float PATIENCE_BAR_HEIGHT = 8f;
-    private static final float PATIENCE_BAR_Y_OFFSET = 5f;
-
     private List<RectF> waitingCustomerTapAreas = new ArrayList<>();
 
     // Tap Areas for Order Indicators
@@ -619,7 +614,6 @@ public class DinerView extends SurfaceView implements SurfaceHolder.Callback {
 
         // Draw Waiting Customers
         List<Customer> waiting = dinerState.getWaitingCustomers();
-        float drawX = waitingAreaRect.left + 20;
         float iconPadding = 5f;
 
         Paint.FontMetrics fm = customerPaint.getFontMetrics();
@@ -985,7 +979,7 @@ public class DinerView extends SurfaceView implements SurfaceHolder.Callback {
 
 
         // Draw Game Over Message
-        if (dinerState.isGameOver()) {
+        if (dinerState != null && dinerState.isGameOver()) {
             String endMessage = "GAME OVER!";
             Paint endPaint = new Paint();
             endPaint.setTextAlign(Paint.Align.CENTER);

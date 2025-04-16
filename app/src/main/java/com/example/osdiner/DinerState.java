@@ -1,7 +1,6 @@
 
 package com.example.osdiner;
 
-import static com.example.osdiner.Customer.UNIVERSAL_EATING_DURATION;
 
 import android.graphics.RectF;
 import android.util.Log;
@@ -24,9 +23,7 @@ public class DinerState {
 
     private static final float COOK_DURATION_SECONDS = 8.0f;
 
-    private static final float EATING_DURATION_SECONDS = 10.0f;
-
-    private int score = 0;
+    private int score;
 
     //Lives and Levels
     private static final int INITIAL_LIVES = 5;
@@ -35,7 +32,7 @@ public class DinerState {
     private int playerLives;
     private int currentLevel;
     private int scoreForNextLevel;
-    private boolean isGameOver = false;
+    private boolean isGameOver;
     private CustomerGeneratorThread customerGeneratorRef = null;
 
     public DinerState(int tableCount, RectF counterRect, RectF[] tableRects, RectF doorRect) {
@@ -316,7 +313,7 @@ public class DinerState {
                 Log.i(TAG, "Clearing table " + table.id + " for customer " + customerToClear.getDisplayId());
 
                 // Score
-                int pointsAwarded = 100;
+                int pointsAwarded = customerToClear.getScoreValue();
                 this.score += pointsAwarded;
                 Log.i(TAG, "Awarded " + pointsAwarded + " points. Total score: " + this.score);
 

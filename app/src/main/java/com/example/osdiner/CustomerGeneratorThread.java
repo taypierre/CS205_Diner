@@ -10,8 +10,6 @@ public class CustomerGeneratorThread extends Thread {
     private final BlockingQueue<Customer> customerQueue;
     private final Random random = new Random();
     private volatile boolean running = true;
-    // Average time between customer arrivals (adjust later for difficulty)
-    private static final int AVG_ARRIVAL_DELAY_MS = 10000;
 
     private final DinerState dinerState;
 
@@ -29,14 +27,14 @@ public class CustomerGeneratorThread extends Thread {
 
     public CustomerGeneratorThread(BlockingQueue<Customer> queue, DinerState dinerState) {
         super("CustomerGeneratorThread");
-        this.dinerState = dinerState; // Correctly store reference
+        this.dinerState = dinerState;
         this.customerQueue = queue;
     }
 
-    // <<< START PAUSE/RESUME METHODS >>>
+
     public void pauseGeneration() {
         paused = true;
-        // No need to notify, just set flag
+        // Set pause flag
         Log.d(TAG, "Pause signaled.");
     }
 
@@ -47,38 +45,35 @@ public class CustomerGeneratorThread extends Thread {
         }
         Log.d(TAG, "Resume signaled.");
     }
-    // <<< END PAUSE/RESUME METHODS >>>
 
 
     public void stopGenerating() {
         Log.i(TAG, ">>> stopGenerating() method ENTERED. Setting running=false and interrupting.");
         running = false;
-        resumeGeneration(); // <<< ADD: Ensure thread wakes up if paused before interrupting
-        interrupt(); // Interrupt sleep or wait
+        resumeGeneration();
+        interrupt();
     }
 
     @Override
     public void run() {
         Log.d(TAG, "run() started.");
-        // Use 'running' flag consistently, checking interrupt status is good too
         while (running && !Thread.currentThread().isInterrupted()) {
             try {
-                // <<< START PAUSE CHECK >>>
+                // Check pause flag
                 synchronized (pauseLock) {
-                    while (paused && running) { // Check running flag too
+                    while (paused && running) {
                         Log.d(TAG, "Generation paused, waiting...");
-                        pauseLock.wait(); // Wait until notified by resumeGeneration()
+                        pauseLock.wait();
                         Log.d(TAG, "Generation woken up from pause.");
                     }
                 }
-                // If stopGenerating was called while waiting, exit loop
+
                 if (!running) break;
-                // <<< END PAUSE CHECK >>>
 
 
-                // --- Calculate Sleep Time (Your existing logic) ---
-                int sleepTimeMs = ABSOLUTE_MIN_TIME_MS; // Default value
-                try { // Wrap calculation just in case
+                // Calculate Sleep Time
+                int sleepTimeMs = ABSOLUTE_MIN_TIME_MS;
+                try {
                     int score = (dinerState != null) ? dinerState.getScore() : 0;
                     int totalReductionMs = (score / SCORE_THRESHOLD) * MAX_TIME_REDUCTION_MS;
                     int dynamicMaxTimeMs = Math.max(ABSOLUTE_MIN_TIME_MS, BASE_MAX_SLEEP_MS - totalReductionMs);
@@ -90,41 +85,39 @@ public class CustomerGeneratorThread extends Thread {
                     Log.d(TAG, "Score: " + score + " => Sleep Range: [" + dynamicMinTimeMs + "-" + dynamicMaxTimeMs + "]ms. Sleeping for " + sleepTimeMs + " ms...");
                 } catch (Exception calcEx) {
                     Log.e(TAG, "Error calculating sleep time", calcEx);
-                    sleepTimeMs = BASE_MIN_SLEEP_MS; // Fallback sleep time
+                    sleepTimeMs = BASE_MIN_SLEEP_MS;
                 }
                 // --------------------------------------------
 
                 Thread.sleep(sleepTimeMs);
 
-                // <<< Check if paused or stopped DURING sleep >>>
+                //Check if paused or stopped DURING sleep
                 if (paused || !running) {
-                    continue; // Go back to the start of the loop to check pause/running state
+                    continue;
                 }
 
-                // 2. Create a new customer
-                Customer newCustomer = new Customer(); // Using your creation logic
+                // Create a new customer
+                Customer newCustomer = new Customer();
                 Log.d(TAG, "Generated Customer: " + newCustomer.getDisplayId() + ". Attempting offer()...");
 
-                // 3. Offer onto the queue (non-blocking)
-                if (dinerState != null && !dinerState.isGameOver()) { // Check game not over
+                //  Add customer to queue
+                if (dinerState != null && !dinerState.isGameOver()) {
                     boolean added = customerQueue.offer(newCustomer);
                     if (!added) {
                         Log.w(TAG, "Arrival queue is full! Customer " + newCustomer.getDisplayId() + " was not added.");
-                        // Optional: Wait a bit if queue full
-                        // try { Thread.sleep(500); } catch (InterruptedException ie) { running = false; }
                     }
                 }
 
             } catch (InterruptedException e) {
                 Log.w(TAG, "Thread interrupted (likely stopping or pause wait).");
-                // If interrupted, let the while loop condition (!running || isInterrupted) handle termination
-                if (!running) { // If stopGenerating was called
-                    break; // Exit loop immediately
+
+                if (!running) {
+                    break;
                 }
-                // If it was interrupted during pause 'wait', the outer loop re-evaluates 'paused'
-            } catch (Exception e) { // Catch other potential runtime errors
+
+            } catch (Exception e) {
                 Log.e(TAG, "!!! Unexpected Exception in CustomerGenerator loop !!!", e);
-                running = false; // Stop on other errors
+                running = false;
             }
         } // End while loop
         Log.i(TAG, "run() finished.");

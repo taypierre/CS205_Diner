@@ -2,7 +2,6 @@ package com.example.osdiner; // Use your actual package name
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 public class HowToPlayActivity extends AppCompatActivity {
@@ -15,12 +14,7 @@ public class HowToPlayActivity extends AppCompatActivity {
 
         Button closeButton = findViewById(R.id.buttonCloseHowToPlay);
         if (closeButton != null) {
-            closeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    finish();
-                }
-            });
+            closeButton.setOnClickListener(v -> finish());
         }
     }
 }

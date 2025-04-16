@@ -1,6 +1,5 @@
 package com.example.osdiner;
 
-// --- Add Missing Imports ---
 import android.graphics.Color;
 import android.util.Log;
 
@@ -9,30 +8,26 @@ import androidx.annotation.DrawableRes;
 import java.util.Random;
 import java.util.Map;
 import java.util.EnumMap;
-// --------------------------
+
 
 public class Customer {
 
-    // --- Nested Enum for Customer Types ---
+    // Enum for Customer Types
     public enum CustomerType {
         NORMAL,
         IMPATIENT,
         VIP
-        // Add more later
     }
 
-    // --- Nested Class for Configuration Data --- (Replaced record)
-    public static class CustomerConfig { // Use 'static' if nested inside Customer
+    public static class CustomerConfig {
         private final CustomerType type;
         private final float initialPatience;
-        // eatingDuration removed for now
         private final int scoreValue;
         @DrawableRes
         private final int iconResId;
 
         private final float patienceRateMultiplier;
 
-        // Constructor
         public CustomerConfig(CustomerType type, float initialPatience, int scoreValue, @DrawableRes int iconResId, float patienceRateMultiplier) {
             this.type = type;
             this.initialPatience = initialPatience;
@@ -60,10 +55,7 @@ public class Customer {
         }
 
     }
-    // --- End CustomerConfig Class ---
 
-
-    // --- Static Configuration Map --- // <<< ADDED STATIC MAP & INIT
     private static final Map<CustomerType, CustomerConfig> CONFIGS;
     static {
         CONFIGS = new EnumMap<>(CustomerType.class);
@@ -83,23 +75,16 @@ public class Customer {
                 1.0f
         ));
     }
-    // -----------------------------------
 
-    // --- Static Helper to Get Config --- // <<< ADDED GETCONFIG METHOD
     public static CustomerConfig getConfig(CustomerType type) {
-        // Default to NORMAL config if the requested type isn't found (safe fallback)
         return CONFIGS.getOrDefault(type, CONFIGS.get(CustomerType.NORMAL));
     }
-    // -----------------------------------
 
-
-    // --- Existing Enum ---
     public enum CustomerState {
         WAITING_QUEUE, SEATED_IDLE, WAITING_ORDER_CONFIRM, WAITING_FOOD,
         FOOD_READY, EATING, READY_TO_LEAVE, ANGRY_LEFT
     }
 
-    // --- Customer Instance Fields ---
     private static final String TAG = "Customer";
     private static int nextId = 0;
     private static Random random = new Random();
@@ -113,76 +98,65 @@ public class Customer {
     private final float patienceRateMultiplier;
 
     private CustomerState state;
-    private float patience; // Current patience
+    private float patience;
 
-    // Timers
     private float timeUntilReadyToOrder;
     private float timeUntilFoodReady;
     private float timeUntilFinishedEating;
-
-    // --- Constants ---
-    // Note: MAX_PATIENCE might be less relevant now that initialPatience varies
-    // public static final float MAX_PATIENCE = 100.0f;
-    private static final float PATIENCE_DECREASE_RATE = 2.0f; // Units per second
+    private static final float PATIENCE_DECREASE_RATE = 2.0f;
     public static final float ORDER_READY_DELAY = 5.0f;
     public static final float UNIVERSAL_EATING_DURATION = 10.0f;
 
-
-    // --- Constructor ---
     public Customer() {
         this.id = nextId++;
 
-        // 1. Assign a Type randomly
+        // Assign a Type randomly
         CustomerType[] allTypes = CustomerType.values();
         this.type = allTypes[random.nextInt(allTypes.length)];
 
-        // 2. Get Config for this type
-        CustomerConfig config = getConfig(this.type); // Use static getter
+        // Get Config for this type
+        CustomerConfig config = getConfig(this.type);
 
-        // 3. Initialize instance fields from config using GETTERS // <<< FIXED GETTERS
+        // Initialize instance fields from config using GETTERS
         this.initialPatience = config.getInitialPatience();
         this.scoreValue = config.getScoreValue();
         this.customerIconResId = config.getIconResId();
         this.patienceRateMultiplier = config.getPatienceRateMultiplier();
-        //-----------------------------------------------------------
 
-        // 4. Initialize dynamic state
-        this.patience = this.initialPatience; // Start with type-specific patience
-        this.state = CustomerState.WAITING_QUEUE; // Initial state
+        // Initialize dynamic state
+        this.patience = this.initialPatience;
+        this.state = CustomerState.WAITING_QUEUE;
 
         // Initialize timers
-        this.timeUntilReadyToOrder = -1f; // Start timer only when SEATED_IDLE
+        this.timeUntilReadyToOrder = -1f;
         this.timeUntilFoodReady = -1f;
         this.timeUntilFinishedEating = -1f;
 
-        // Updated Log message to use the assigned values
         Log.d(TAG, "Created " + getDisplayId() + " of type " + this.type
                 + " (Patience: " + this.initialPatience + ", RateMult: " + this.patienceRateMultiplier
-                + ", Score: " + this.scoreValue + ", IconID: " + this.customerIconResId + ")"); // Log Icon ID
+                + ", Score: " + this.scoreValue + ", IconID: " + this.customerIconResId + ")");
     }
 
-    // --- Getters ---
     public String getDisplayId() {
-        // <<< METHOD MODIFIED >>>
-        String prefix; // Declare prefix variable
 
-        // Use traditional switch STATEMENT
+        String prefix;
+
         switch (this.type) {
             case NORMAL:
                 prefix = "C";
-                break; // Need break statements
+                break;
             case IMPATIENT:
                 prefix = "IMP";
                 break;
             case VIP:
                 prefix = "VIP";
                 break;
-            default: // Add a default case as good practice
-                prefix = "C"; // Fallback to Normal prefix
-                Log.w(TAG, "getDisplayId() encountered unexpected type: " + this.type); // Log warning
+            default:
+                prefix = "C";
+                Log.w(TAG, "getDisplayId() encountered unexpected type: " + this.type);
                 break;
         }
-        return prefix + id; // Combine prefix and unique numeric ID
+        return prefix + id;
     }
     public CustomerState getState() { return this.state; }
     public float getPatience() { return this.patience; }
@@ -193,13 +167,10 @@ public class Customer {
     // Calculate percentage based on initial patience for this customer
     public float getPatiencePercentage() {
         if (this.initialPatience <= 0) return 0.0f;
-        // Clamp value between 0 and 1
         return Math.max(0.0f, Math.min(1.0f, this.patience / this.initialPatience));
     }
 
-    // --- State and Timer Methods ---
-    // (leaveAngry, setState, decreasePatience, timer methods remain largely the same)
-    // ... ensure startEatingTimer uses UNIVERSAL_EATING_DURATION ...
+    // State and Timer Methods
     public void leaveAngry() {
         this.state = CustomerState.ANGRY_LEFT;
         this.patience = 0;
@@ -263,6 +234,9 @@ public class Customer {
     public boolean isFinishedEating() {
         return this.state == CustomerState.EATING && this.timeUntilFinishedEating <= 0;
     }
+    public static void resetCustomerIdCounter() {
+        nextId = 0;
+    }
     public float getTimeUntilFinishedEating() { return timeUntilFinishedEating; }
 
-} // End of Customer class
+}

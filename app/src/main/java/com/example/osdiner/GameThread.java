@@ -1,4 +1,3 @@
-// GameThread.java
 package com.example.osdiner;
 
 
@@ -7,7 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.util.Log;
 import android.view.SurfaceHolder;
-
+@SuppressWarnings("BusyWait")
 public class GameThread extends Thread {
     private static final String TAG = "GameThread";
 

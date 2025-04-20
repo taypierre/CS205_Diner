@@ -14,7 +14,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="How to Play OSDiner"
+            android:text="@string/how_to_play_title"
             android:textSize="24sp"
             android:textStyle="bold"
             android:layout_marginBottom="16dp"/>
@@ -22,21 +22,21 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Objective:\nServe customers quickly and efficiently to maximize your score before they leave or you lose all your lives!"
+            android:text="@string/objective_text"
             android:textSize="16sp"
             android:layout_marginBottom="12dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Gameplay:\n1. Customers arrive and wait for a table.\n2. Assign them to a table and take their order.\n3. Bring the food from kitchen to respective customer.\n4. Clear the table."
+            android:text="@string/gameplay_text"
             android:textSize="16sp"
             android:layout_marginBottom="12dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Customer Types:\n- Normal: Standard patience. Worth 100 points.\n- Impatient: Lose patience faster! Worth 150 points.\n- VIP: Give bonus points (250 points!) but require faster service."
+            android:text="@string/customer_types_text"
             android:textSize="16sp"
             android:layout_marginBottom="12dp"/>
 
@@ -46,7 +46,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="24dp"
-            android:text="Got It!"/>
+            android:text="@string/got_it_button"/>
+
 
     </LinearLayout>
 </ScrollView>

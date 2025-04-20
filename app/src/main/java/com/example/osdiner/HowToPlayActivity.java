@@ -1,4 +1,4 @@
-package com.example.osdiner; // Use your actual package name
+package com.example.osdiner;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;

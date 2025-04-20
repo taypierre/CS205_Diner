@@ -19,7 +19,6 @@ public class Customer {
     }
 
     public static class CustomerConfig {
-        private final CustomerType type;
         private final float initialPatience;
         private final int scoreValue;
         @DrawableRes
@@ -27,8 +26,7 @@ public class Customer {
 
         private final float patienceRateMultiplier;
 
-        public CustomerConfig(CustomerType type, float initialPatience, int scoreValue, @DrawableRes int iconResId, float patienceRateMultiplier) {
-            this.type = type;
+        public CustomerConfig(float initialPatience, int scoreValue, @DrawableRes int iconResId, float patienceRateMultiplier) {
             this.initialPatience = initialPatience;
             this.scoreValue = scoreValue;
             this.iconResId = iconResId;
@@ -56,17 +54,17 @@ public class Customer {
     static {
         CONFIGS = new EnumMap<>(CustomerType.class);
         CONFIGS.put(CustomerType.NORMAL, new CustomerConfig(
-                CustomerType.NORMAL, 250f, 100,
+               250f, 100,
                 R.drawable.customer_normal,
                 1.0f
         ));
         CONFIGS.put(CustomerType.IMPATIENT, new CustomerConfig(
-                CustomerType.IMPATIENT, 200f, 150,
+                200f, 150,
                 R.drawable.customer_impatient,
                 1.5f
         ));
         CONFIGS.put(CustomerType.VIP, new CustomerConfig(
-                CustomerType.VIP, 180f, 250,
+                180f, 250,
                 R.drawable.customer_vip,
                 1.0f
         ));
@@ -83,7 +81,7 @@ public class Customer {
 
     private static final String TAG = "Customer";
     private static int nextId = 0;
-    private static Random random = new Random();
+    private static final Random random = new Random();
 
     public final int id;
     private final CustomerType type;

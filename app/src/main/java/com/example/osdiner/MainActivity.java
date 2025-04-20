@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
-
 public class MainActivity extends AppCompatActivity {
 
     public static final String PREFS_NAME = "GamePrefs";
@@ -27,15 +26,13 @@ public class MainActivity extends AppCompatActivity {
 
         TextView highScoreTextView = findViewById(R.id.text_high_score);
         if (highScoreTextView != null) {
-            highScoreTextView.setText("High Score: " + highScore);
+            highScoreTextView.setText(getString(R.string.high_score_label, highScore));
         }
-
 
         // Find and Setup Buttons
         Button startButton = findViewById(R.id.button_start_game);
         Button exitButton = findViewById(R.id.button_exit);
 
-        // Set click listeners
         if (startButton != null) {
             startButton.setOnClickListener(v -> {
                 Intent gameIntent = new Intent(MainActivity.this, GameActivity.class);
@@ -47,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
             exitButton.setOnClickListener(v -> finishAffinity());
         }
 
-
         Button howToPlayButton = findViewById(R.id.buttonHowToPlay);
         if (howToPlayButton != null) {
             howToPlayButton.setOnClickListener(v -> {
@@ -55,35 +51,30 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             });
         }
+
         Button creditsButton = findViewById(R.id.buttonCredits);
         if (creditsButton != null) {
             creditsButton.setOnClickListener(v -> showCreditsDialog());
         }
     }
 
-    // Refresh high score display when returning to the menu
     @Override
     protected void onResume() {
         super.onResume();
-        // Load and Display High Score
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         int highScore = prefs.getInt(KEY_HIGHSCORE, 0);
 
         TextView highScoreTextView = findViewById(R.id.text_high_score);
         if (highScoreTextView != null) {
-            highScoreTextView.setText("High Score: " + highScore);
+            highScoreTextView.setText(getString(R.string.high_score_label, highScore));
         }
     }
 
     private void showCreditsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
         builder.setTitle(R.string.credits_dialog_title);
         builder.setMessage(R.string.credits_dialog_message);
-
         builder.setPositiveButton(R.string.dialog_ok_button, null);
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        builder.create().show();
     }
 }

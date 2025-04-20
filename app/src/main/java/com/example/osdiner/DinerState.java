@@ -1,4 +1,3 @@
-
 package com.example.osdiner;
 
 
@@ -35,7 +34,7 @@ public class DinerState {
     private boolean isGameOver;
     private CustomerGeneratorThread customerGeneratorRef = null;
 
-    public DinerState(int tableCount, RectF counterRect, RectF[] tableRects, RectF doorRect) {
+    public DinerState() {
         // Initialize core components
         customerArrivalQueue = new ArrayBlockingQueue<>(ARRIVAL_QUEUE_CAPACITY);
         waitingCustomers = new ArrayList<>();

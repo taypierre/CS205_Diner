@@ -54,6 +54,7 @@ public class CustomerGeneratorThread extends Thread {
         interrupt();
     }
 
+    @SuppressWarnings("BusyWait")
     @Override
     public void run() {
         Log.d(TAG, "run() started.");
@@ -72,7 +73,7 @@ public class CustomerGeneratorThread extends Thread {
 
 
                 // Calculate Sleep Time
-                int sleepTimeMs = ABSOLUTE_MIN_TIME_MS;
+                int sleepTimeMs;
                 try {
                     int score = (dinerState != null) ? dinerState.getScore() : 0;
                     int totalReductionMs = (score / SCORE_THRESHOLD) * MAX_TIME_REDUCTION_MS;
@@ -88,7 +89,6 @@ public class CustomerGeneratorThread extends Thread {
                     sleepTimeMs = BASE_MIN_SLEEP_MS;
                 }
                 // --------------------------------------------
-
                 Thread.sleep(sleepTimeMs);
 
                 //Check if paused or stopped DURING sleep

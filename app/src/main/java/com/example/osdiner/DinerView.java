@@ -33,43 +33,43 @@ import java.util.Map;
 
 public class DinerView extends SurfaceView implements SurfaceHolder.Callback {
 
-    private static final String TAG = "DinerView"; // Tag for logging
+    private static final String TAG = "DinerView";
 
-    private Context context;
+    private final Context context;
     private GameThread gameThread;
     private DinerState dinerState;
-    private Paint backgroundPaint;
-    private Paint tablePaint;
+    private final Paint backgroundPaint;
+    private final Paint tablePaint;
 
     private CustomerGeneratorThread customerGenerator;
-    private Paint customerPaint;
-    private Paint selectedCustomerPaint;
-    private Paint waitingAreaPaint;
-    private Paint counterPaint;
-    private Paint textPaint;
-    private Paint uiTextPaint;
+    private final Paint customerPaint;
+    private final Paint selectedCustomerPaint;
+    private final Paint waitingAreaPaint;
+    private final Paint counterPaint;
+    private final Paint textPaint;
+    private final Paint uiTextPaint;
 
-    private Paint patienceBarBgPaint;
-    private Paint patienceBarFgPaint;
+    private final Paint patienceBarBgPaint;
+    private final Paint patienceBarFgPaint;
 
-    private Paint orderIndicatorPaint;
-    private Paint orderIndicatorTextPaint;
+    private final Paint orderIndicatorPaint;
+    private final Paint orderIndicatorTextPaint;
 
-    private Paint foodReadyIndicatorPaint;
-    private Paint foodItemPaint;
+    private final Paint foodReadyIndicatorPaint;
+    private final Paint foodItemPaint;
 
 
-    private Paint clearTableIndicatorPaint;
-    private Paint clearTableIndicatorTextPaint;
+    private final Paint clearTableIndicatorPaint;
+    private final Paint clearTableIndicatorTextPaint;
 
     private RectF waitingAreaRect;
     private RectF counterRect;
     private RectF[] tableRects;
 
 
-    private Paint bitmapPaint;
+    private final Paint bitmapPaint;
 
-    private Map<Integer, Bitmap> customerBitmaps = new HashMap<>();
+    private final Map<Integer, Bitmap> customerBitmaps = new HashMap<>();
 
     private Bitmap heartBitmap;
     private static final float HEART_SIZE = 50f;
@@ -85,15 +85,15 @@ public class DinerView extends SurfaceView implements SurfaceHolder.Callback {
 
     private static final float PATIENCE_BAR_WIDTH = 60f;
     private static final float PATIENCE_BAR_HEIGHT = 8f;
-    private List<RectF> waitingCustomerTapAreas = new ArrayList<>();
+    private final List<RectF> waitingCustomerTapAreas = new ArrayList<>();
 
     // Tap Areas for Order Indicators
-    private List<Pair<RectF, Customer>> confirmOrderTapAreas = new ArrayList<>();
+    private final List<Pair<RectF, Customer>> confirmOrderTapAreas = new ArrayList<>();
 
-    private List<Pair<RectF, Customer>> foodReadyTapAreas = new ArrayList<>();
+    private final List<Pair<RectF, Customer>> foodReadyTapAreas = new ArrayList<>();
 
-    private List<Pair<RectF, Customer>> clearTableTapAreas = new ArrayList<>();
-    private Rect textBounds = new Rect();
+    private final List<Pair<RectF, Customer>> clearTableTapAreas = new ArrayList<>();
+    private final Rect textBounds = new Rect();
 
     // Score Animation Fields
     private float displayedScore = 0f;
@@ -110,8 +110,8 @@ public class DinerView extends SurfaceView implements SurfaceHolder.Callback {
 
     // Menu Button Fields
     private RectF menuButtonArea;
-    private Paint menuButtonPaint;
-    private Paint menuButtonTextPaint;
+    private final Paint menuButtonPaint;
+    private final Paint menuButtonTextPaint;
     private static final float MENU_BUTTON_WIDTH = 120f;
     private static final float MENU_BUTTON_HEIGHT = 70f;
     private static final float MENU_BUTTON_MARGIN = 30f;
@@ -308,11 +308,10 @@ public class DinerView extends SurfaceView implements SurfaceHolder.Callback {
         tableRects = new RectF[numTables];
         float tableAreaLeft = waitingAreaRect.right + margin;
         float tableAreaRight = width - margin;
-        float tableAreaTop = margin;
 
         float tableAreaBottom = newCounterTop - margin;
         float tableAreaWidth = tableAreaRight - tableAreaLeft;
-        float tableAreaHeight = tableAreaBottom - tableAreaTop;
+        float tableAreaHeight = tableAreaBottom - margin;
 
         float tableSize = Math.min(tableAreaWidth / (numTables + 1), tableAreaHeight / 2.5f);
 
@@ -320,7 +319,7 @@ public class DinerView extends SurfaceView implements SurfaceHolder.Callback {
 
         for (int i = 0; i < numTables; i++) {
             float tableLeft = tableAreaLeft + (i + 1) * tableSpacingX + i * tableSize;
-            float tableTop = tableAreaTop + (tableAreaHeight - tableSize) / 2.0f;
+            float tableTop = margin + (tableAreaHeight - tableSize) / 2.0f;
             tableRects[i] = new RectF(tableLeft, tableTop, tableLeft + tableSize, tableTop + tableSize);
         }
         Log.d(TAG, "Layout calculated.");
@@ -455,7 +454,7 @@ public class DinerView extends SurfaceView implements SurfaceHolder.Callback {
         // Create DinerState if it doesn't exist AND layout is ready
         if (dinerState == null && tableRects != null && counterRect != null) {
             Log.d(TAG, "surfaceChanged: Creating DinerState...");
-            dinerState = new DinerState(tableRects.length, counterRect, tableRects, null);
+            dinerState = new DinerState();
             Log.i(TAG, "DinerState created.");
         }
 
@@ -511,15 +510,14 @@ public class DinerView extends SurfaceView implements SurfaceHolder.Callback {
             Log.d(TAG, "Heart bitmap recycled.");
         }
 
-        if (customerBitmaps != null) {
-            for (Bitmap bmp : customerBitmaps.values()) {
-                if (bmp != null && !bmp.isRecycled()) {
-                    bmp.recycle();
-                }
+        for (Bitmap bmp : customerBitmaps.values()) {
+            if (bmp != null && !bmp.isRecycled()) {
+                bmp.recycle();
             }
-            customerBitmaps.clear();
-            Log.d(TAG, "Customer bitmaps recycled and cleared.");
         }
+        customerBitmaps.clear();
+        Log.d(TAG, "Customer bitmaps recycled and cleared.");
+
 
         dinerState = null;
 
@@ -716,7 +714,6 @@ public class DinerView extends SurfaceView implements SurfaceHolder.Callback {
 
                 // Calculate Text Position
                 seatedCustomerPaint.getTextBounds(customerText, 0, customerText.length(), textBounds);
-                float textDrawX_seated = tableCenterX;
                 float textDrawY_seated = iconDestRect.bottom + textBounds.height() + 5f;
 
 
@@ -737,7 +734,7 @@ public class DinerView extends SurfaceView implements SurfaceHolder.Callback {
 
                 //  Draw Customer Text Label
                 seatedCustomerPaint.setColor(Color.DKGRAY);
-                canvas.drawText(customerText, textDrawX_seated, textDrawY_seated, seatedCustomerPaint);
+                canvas.drawText(customerText, tableCenterX, textDrawY_seated, seatedCustomerPaint);
 
 
                 // Draw State Indicators OR Food on Table
@@ -856,8 +853,7 @@ public class DinerView extends SurfaceView implements SurfaceHolder.Callback {
                 }
             } else if (draggedFoodCustomer != null) {
 
-                float draggedFoodSize = FOOD_PLATE_DIAMETER;
-                float plateRadius_drag = draggedFoodSize / 2f;
+                float plateRadius_drag = FOOD_PLATE_DIAMETER / 2f;
                 float foodRadius_drag = plateRadius_drag * 0.65f;
                 canvas.drawCircle(dragX, dragY, plateRadius_drag, foodReadyIndicatorPaint);
                 canvas.drawCircle(dragX, dragY, foodRadius_drag, foodItemPaint);
@@ -879,16 +875,15 @@ public class DinerView extends SurfaceView implements SurfaceHolder.Callback {
 
         // Calculate Score Position & Draw
         float scoreX = canvas.getWidth() - uiPaddingRight;
-        float scoreY = uiPaddingTop;
         String scoreText = String.format(Locale.US, "Score: %d", (int) displayedScore);
 
         Paint.FontMetrics scoreFm = uiTextPaint.getFontMetrics();
         float scoreTextHeight = scoreFm.descent - scoreFm.ascent;
 
-        canvas.drawText(scoreText, scoreX, scoreY + scoreTextHeight, uiTextPaint);
+        canvas.drawText(scoreText, scoreX, uiPaddingTop + scoreTextHeight, uiTextPaint);
 
 
-        float heartsY = scoreY + scoreTextHeight + uiVerticalSpacing;
+        float heartsY = uiPaddingTop + scoreTextHeight + uiVerticalSpacing;
 
         // Draw Lives
         if (dinerState != null && heartBitmap != null) {
@@ -1005,6 +1000,12 @@ public class DinerView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     @Override
+    public boolean performClick() {
+        super.performClick();
+        return true;
+    }
+
+    @Override
     public boolean onTouchEvent(MotionEvent event) {
 
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -1014,6 +1015,7 @@ public class DinerView extends SurfaceView implements SurfaceHolder.Callback {
                 float touchY = event.getY();
                 if (menuButtonArea.contains(touchX, touchY)) {
                     Log.d(TAG, "Menu button tapped!");
+                    performClick();
                     pauseGame();
                     if (context instanceof GameActivity) {
                         ((GameActivity) context).showInGameMenu();
@@ -1044,7 +1046,7 @@ public class DinerView extends SurfaceView implements SurfaceHolder.Callback {
                 for (int i = 0; i < waitingCustomerTapAreas.size(); i++) {
 
                     RectF tapArea = waitingCustomerTapAreas.get(i);
-                    Customer potentialDragCustomer = null;
+                    Customer potentialDragCustomer;
                     try { potentialDragCustomer = waiting.get(i); } catch (IndexOutOfBoundsException e) { continue; }
 
                     if (potentialDragCustomer != null && tapArea.contains(touchX, touchY) && potentialDragCustomer.getState() == Customer.CustomerState.WAITING_QUEUE) {

@@ -13,37 +13,42 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="OS Diner"
+        android:text="@string/app_title"
         android:textSize="34sp"
         android:layout_marginBottom="16dp"/>
+
     <TextView
-    android:id="@+id/text_high_score"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="High Score: 0"
-    android:textSize="20sp"
-    android:layout_marginBottom="6dp"/>
+        android:id="@+id/text_high_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/high_score_template"
+        android:textSize="20sp"
+        android:layout_marginBottom="6dp"/>
+
     <Button
-    android:id="@+id/button_start_game"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Start Game"
-    android:layout_marginBottom="2dp"/>
+        android:id="@+id/button_start_game"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/start_game"
+        android:layout_marginBottom="2dp"/>
+
     <Button
-    android:id="@+id/buttonHowToPlay"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="How to Play"
-    android:layout_marginBottom="2dp"/>
+        android:id="@+id/buttonHowToPlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/how_to_play"
+        android:layout_marginBottom="2dp"/>
+
     <Button
-    android:id="@+id/buttonCredits"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Credits"
-    android:layout_marginBottom="2dp"/>
+        android:id="@+id/buttonCredits"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/credits"
+        android:layout_marginBottom="2dp"/>
+
     <Button
-    android:id="@+id/button_exit"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Exit"/>
+        android:id="@+id/button_exit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/exit"/>
 </LinearLayout>
